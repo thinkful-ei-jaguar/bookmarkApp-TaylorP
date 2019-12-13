@@ -1,0 +1,130 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    font-family: sans-serif;
+}
+
+.nav-bar {
+    height: 75px;
+    background-color: lightgrey;
+    
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#add-button {
+    height: 30px;
+    width: 30px;
+    border-radius: 5px;
+    border: 1px black solid;
+    box-shadow: 2px 3px 3px rgba(0,0,0,0.25);
+    font-size: large;
+}
+
+button:active {
+    background: #e5e5e5;
+    -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
+       -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
+            box-shadow: inset 0px 0px 5px #c1c1c1;
+     outline: none;
+  }
+
+datalist {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin-bottom: 15px;
+}
+
+.slide-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;;
+    width: 200px;
+}
+
+h2 {
+    padding: 10px;
+    font-weight: 400;
+    font-size: medium;
+}
+
+
+
+.bookmarks-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin: auto;
+    width: 328px;
+}
+
+.bookmark {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 7px 7px;
+    padding: 10px;
+    height: 150px;
+    width: 150px;
+    border: 1px black solid;
+    box-shadow: 2px 3px 3px rgba(0,0,0,0.25);
+    background-color: lightgrey;
+    overflow: hidden;
+    text-align: center;
+}
+
+.ratings {
+    display: flex;
+    flex-direction: row;
+}
+
+h3 {
+    
+}
+
+.star {
+    width: 10px;
+    height: 10px;
+    border: 1px black solid;
+    margin: 5px 2px;;
+}
+
+.checked {
+    background-color: green;
+}
+
+@media screen and  (min-width: 600px){
+.bookmarks-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+
+.bookmark {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 7px auto;
+    padding: 0 30px;
+    height: 60px;
+    width: 80%;
+    max-width: 800px;
+    border: 1px black solid;
+    box-shadow: 2px 3px 3px rgba(0,0,0,0.25);
+    background-color: lightgrey;
+    text-align: left;
+}
+}

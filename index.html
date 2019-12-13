@@ -8,6 +8,43 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    
+    <nav class='nav-bar'>
+        <div></div>
+        <h1>bookmarks</h1>
+        <div class='add-button-container'>
+            <button type='button' name='add-button' id='add-button'>+</button>
+        </div>
+    </nav>
+    <main>
+        <header>
+        <div class="slide-container">
+            <h2 id='rating-header'>Minimum Rating:</h2>
+            <input type="range" min="1" max="5" value="1" class="slider" id="myRange" list='tickmarks'>
+            <datalist id="tickmarks">
+                    <option value="1" label="1"></option>
+                    <option value="2"></option>
+                    <option value="3"></option>
+                    <option value="4"></option>
+                    <option value="5" label="5"></option>
+                  </datalist>
+        </div>
+        </header>
+        <section class='bookmarks-container'>
+            <div class='bookmark'>
+                <h3>Title lfjgn dhs fioh gndgsfarr gkdienb gmns dh duw</h3>
+                <div class=ratings>
+                    <div class='star checked'></div>
+                    <div class='star checked'></div>
+                    <div class='star checked'></div>
+                    <div class='star'></div>
+                    <div class='star'></div>
+                </div>
+            </div>
+            <div class='bookmark'></div>
+            <div class='bookmark'></div>
+            <div class='bookmark'></div>
+            <div class='bookmark'></div>
+        </section>
+    </main>
 </body>
 </html>

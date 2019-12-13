@@ -12,10 +12,12 @@
     justify-content: space-around;
     align-items: center;
 }
-
-#add-button {
+#add-button{
     height: 30px;
     width: 30px;
+}
+
+button {
     border-radius: 5px;
     border: 1px black solid;
     box-shadow: 2px 3px 3px rgba(0,0,0,0.25);
@@ -58,6 +60,10 @@ h2 {
     font-size: medium;
 }
 
+#add {
+    display: none;
+}
+
 
 
 .bookmarks-container {
@@ -81,7 +87,6 @@ h2 {
     border: 1px black solid;
     box-shadow: 2px 3px 3px rgba(0,0,0,0.25);
     background-color: lightgrey;
-    overflow: hidden;
     text-align: center;
 }
 
@@ -98,7 +103,25 @@ h3 {
     width: 10px;
     height: 10px;
     border: 1px black solid;
-    margin: 5px 2px;;
+    margin: 5px 2px;
+}
+
+.expand {
+    width: 328px;
+    height: 328px;
+}
+
+.expand-buttons {
+    margin: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+
+}
+
+.expand-buttons buttons {
+    
 }
 
 .checked {
@@ -106,6 +129,14 @@ h3 {
 }
 
 @media screen and  (min-width: 600px){
+#add {
+    display: inline;
+}
+
+#add-button {
+    width: 85px;
+}
+
 .bookmarks-container {
     display: flex;
     flex-direction: column;
@@ -126,5 +157,10 @@ h3 {
     box-shadow: 2px 3px 3px rgba(0,0,0,0.25);
     background-color: lightgrey;
     text-align: left;
+}
+
+.expand {
+    height: 256px;
+    flex-direction: column;
 }
 }

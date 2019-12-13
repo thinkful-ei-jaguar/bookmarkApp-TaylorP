@@ -95,6 +95,14 @@ h2 {
     flex-direction: row;
 }
 
+#add-rating {
+    justify-content: space-evenly;
+}
+
+#title, #url {
+    width: 200px;
+}
+
 h3 {
     
 }
@@ -112,16 +120,12 @@ h3 {
 }
 
 .expand-buttons {
-    margin: 20px;
+    margin: 10px 0;
     width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
 
-}
-
-.expand-buttons buttons {
-    
 }
 
 .checked {
@@ -170,13 +174,24 @@ h3 {
 }
 
 .expand {
-    height: 256px;
+    height: 280px;
+    flex-direction: column;
+}
+
+
+
+#add-bookmark {
+    display: flex;
     flex-direction: column;
 }
 
 #description {
     width: 450px;
     height: 130px;
+}
+
+#title, #url {
+    width: 450px;
 }
 
 }

@@ -1,10 +1,12 @@
-const create = function(title, url, desc, rating) {
+import cuid from 'cuid';
+
+const create = function(title, rating, desc, url) {
     return {
         id: cuid(),
         'title': title,
-        'url': url,
-        'desc': desc,
         'rating': rating,
+        'desc': desc,
+        'url': url,
         expanded: false
     };
 };
@@ -25,5 +27,5 @@ export default {
     create,
     validateTitle,
     validateUrl,
-    ValidateDesc
+    validateDesc
 }

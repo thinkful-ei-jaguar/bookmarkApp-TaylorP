@@ -1,5 +1,4 @@
 import store from './store';
-//import bookmark from './bookmark';
 import $ from 'jquery';
 
 
@@ -29,19 +28,57 @@ const generateList = function() {
 }
 
 const generateBookmarkElement = function(bookmark) {
-    let bookmarkElement = `<div class='bookmark' id='expand'>
+    let bookmarkElement = `<div class='bookmark' id='expand' data-id='${bookmark.id}'>
     <h3>${bookmark.title}</h3>
-      <div class=ratings>
-        <div class='star checked'></div>
-        <div class='star checked'></div>
-        <div class='star checked'></div>
-        <div class='star'></div>
-        <div class='star'></div>
-      </div>
-    </div>`;
+      <div class=ratings>`
+      +generateBookmarkRatingElement(bookmark)+
+      `</div>
+      <section class='description hidden'>
+            <p>${bookmark.desc}</p>
+      </section>
+      <section class='expand-buttons hidden'>
+            <button type='button' id='visit-button' name='visit-button'>Visit</buttion>
+            <button type='button' id='edit-button' name='edit-button' href='edit.html'>edit</buttion>
+      </section>
+      </div>`
+    ;
+    if(bookmark.expanded) {
+        bookmarkElement = `<div class='bookmark expand' id='expand' data-id='${bookmark.id}'>
+        <h3>${bookmark.title}</h3>
+          <div class=ratings>`
+          +generateBookmarkRatingElement(bookmark)+
+          `</div>
+          <section class='description'>
+                <p>${bookmark.desc}</p>
+          </section>
+          <section class='expand-buttons'>
+                <button type='button' id='visit-button' name='visit-button'>Visit</buttion>
+                <button type='button' id='edit-button' name='edit-button' href='edit.html'>edit</buttion>
+          </section>
+          </div>`;
+    }
 
     return bookmarkElement;
 }
+
+const generateBookmarkRatingElement = function(bookmark) {
+    let starRatings = '';
+    let checksNeedToAdd = bookmark.rating;
+    let starElement;
+  
+    for(let i = 0; i < 5; i++) {
+      if(checksNeedToAdd > 0) {
+        starElement = `<div class='star checked'></div>`;
+        checksNeedToAdd -= 1;
+      } else {
+        starElement = `<div class='star'></div>`;
+      }
+  
+      starRatings += starElement;
+    }
+  
+    return starRatings;
+  }
 
 const generateBookmarkString = function(bookmarkList) {
     const bookmarks = bookmarkList.map((item)=>generateBookmarkElement(item));
@@ -83,6 +120,29 @@ const handleAddClick = function() {
     })
 }
 
+const handleVisitClick = function() {
+    $('.main').on('click', '#visit-button', event=>{
+        event.stopPropagation();
+        let id = getBookmarkIdFromElement(event.currentTarget);
+        store.findAndGoToLink(id);
+        console.log('visit button clicked');
+        //visit click goes to link
+    })
+}
+
+const getBookmarkIdFromElement = function(bookmark) {
+    return $(bookmark).closest('.bookmark').data('id');
+}
+
+const handleExpand = function() {
+    $('.main').on('click', '#expand', event => {
+        event.preventDefault();
+        let id = getBookmarkIdFromElement(event.currentTarget);
+        store.findAndExpand(id);
+        render();
+    })
+}
+
 const handleNewBookmarkSubmit = function () {
     $('.main').submit(function (event) {
       event.preventDefault();
@@ -98,6 +158,7 @@ const handleNewBookmarkSubmit = function () {
     $('.main').on('click', '#cancel-button', event => {
         event.preventDefault();
         console.log('cancel button clicked');
+        $('#add-button').removeAttr('disabled');
         render();
     })
   };
@@ -116,6 +177,8 @@ let render = function() {
 let bindEventListeners = function() {
     handleAddClick();
     handleNewBookmarkSubmit();
+    handleExpand();
+    handleVisitClick();
 }
 
 export default {

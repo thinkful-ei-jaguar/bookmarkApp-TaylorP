@@ -143,6 +143,10 @@ h3 {
     overflow-wrap: break-word;
 }
 
+.hidden {
+    display: none;
+}
+
 @media screen and  (min-width: 600px){
 #add {
     display: inline;

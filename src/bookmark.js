@@ -7,7 +7,8 @@ const create = function(title, rating, desc, url) {
         'rating': rating,
         'desc': desc,
         'url': url,
-        expanded: false
+        expanded: false,
+        editing: false
     };
 };
 

@@ -2,6 +2,7 @@ import bookmark from './bookmark';
 
 const bookmarks = [];
 
+
 const findById = function(id) {
     return this.bookmarks.find(currentItem => currentItem.id ===id);
 };
@@ -51,5 +52,6 @@ export default {
   findAndEdit,
   findAndGoToLink,
   findAndDelete,
-  toggleFilterRating
+  toggleFilterRating,
+  minRating:1,
 }

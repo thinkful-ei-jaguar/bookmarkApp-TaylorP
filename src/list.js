@@ -6,7 +6,7 @@ const generateSlider = function() {
     let header = ` <header>
     <div class="slide-container">
         <h2 id='rating-header'>Minimum Rating:</h2>
-        <input type="range" min="1" max="5" value="1" class="slider" id="slider" list='tickmarks' oninput='filterByRating()'>
+        <input type="range" min="1" max="5" value="${store.minRating}" class="slider" id="slider" list='tickmarks'>
         <datalist id="tickmarks">
                 <option value="1" label="1"></option>
                 <option value="2"></option>
@@ -42,6 +42,9 @@ const generateBookmarkElement = function(bookmark) {
       </section>
       </div>`
     ;
+    if(store.minRating > bookmark.rating){
+        return '';
+    }
     if(bookmark.expanded) {
         bookmarkElement = `<div class='bookmark expand' id='expand' data-id='${bookmark.id}'>
         <h3>${bookmark.title}</h3>
@@ -91,15 +94,15 @@ const generateAddBookmark = function() {
         <label for="title">Title:</label>
         <input type="text" name='title' id='title' placeholder="Add a title..." maxlength="50" required>
     <div class=ratings id='add-rating'>
-        <input type="radio" name="initial-rating" value="1">1
-        <input type="radio" name="initial-rating" value="2">2
-        <input type="radio" name="initial-rating" value="3">3
-        <input type="radio" name="initial-rating" value="4">4
-        <input type="radio" name="initial-rating" value="5">5
+        <input type="radio" name="initial-rating" value="1" required>1
+        <input type="radio" name="initial-rating" value="2" required>2
+        <input type="radio" name="initial-rating" value="3" required>3
+        <input type="radio" name="initial-rating" value="4" required>4
+        <input type="radio" name="initial-rating" value="5" required>5
     </div>
       <textarea rows="14" cols="10" maxlength="350" wrap="soft" id='description' name='description' placeholder="Add a description..." required></textarea>
       <label for="url">URL:</label>
-      <input type="text" name="url" id="url" required>
+      <input type="url" name="url" id="url" required>
       <section class='expand-buttons'>
           <button type='submit' id='save-button' name='save-button'>Save</button>
           <button type='button' id='cancel-button' name='cancel-button'>Cancel</button>
@@ -153,6 +156,7 @@ const handleEditClick = function (){
         event.stopPropagation();
         let id = getBookmarkIdFromElement(event.currentTarget);
         let bookmark = store.findAndEdit(id);
+        bookmark.editing = !bookmark.editing;
         generateUpdateForm(bookmark);
 });
 }
@@ -173,10 +177,15 @@ const getBookmarkIdFromElement = function(bookmark) {
 const handleExpand = function() {
     $('.main').on('click', '#expand', event => {
         event.preventDefault();
+        event.stopPropagation();
         let id = getBookmarkIdFromElement(event.currentTarget);
-        store.findAndExpand(id);
-        console.log('expand!')
-        render();
+        let bookmark = store.findAndEdit(id);
+        if (!bookmark.editing) {
+          //bookmark.editing = !bookmark.editing;
+          store.findAndExpand(id);
+          console.log(bookmark.editing);
+          render();
+        }
     })
 }
 
@@ -197,10 +206,7 @@ const handleNewBookmarkSubmit = function () {
         render();
     })
   };
-/**
- * current spot: text fields rendering, contracts as soon as you click to edit field.
- * Added event.stopPropgation but no luck
- */
+
   const handleUpdateBookmark = function() {
     $('.main').on('click', '#update-button', event =>{
         event.stopPropagation();
@@ -211,24 +217,31 @@ const handleNewBookmarkSubmit = function () {
 
       let id = getBookmarkIdFromElement(event.currentTarget);
       let bookmark = store.findAndEdit(id);
+      
       console.log(bookmark);
       bookmark.title = updateBookmarkTitle;
       bookmark.desc = updateBookmarkDesc;
       bookmark.rating = updateBookmarkRating;
+      bookmark.editing=!bookmark.editing;
       console.log(bookmark);
       render();
 
   })
   }
 
- const filterByRating = function(){
-    let rating = document.getElementById('slider').value;
-    console.log(rating);
+ const handleMinRating =function() {
+     $('.main').on('click', '#slider', function(e){
+         e.stopPropagation();
+         let min = $('#slider').val();
+         //console.log(store.minRating);
+         store.minRating = min;
+         console.log('refresh');
+         render();
+     })
  }
 
 let render = function() {
     let bookmarks = [...store.bookmarks];
-    //filterByRating();
     generateSlider();
     generateList();
 
@@ -246,6 +259,7 @@ let bindEventListeners = function() {
     handleEditClick();
     handleUpdateBookmark();
     handleDeleteClick();
+    handleMinRating();
 }
 
 export default {

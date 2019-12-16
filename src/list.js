@@ -118,13 +118,7 @@ const generateUpdateForm = function(bookmark) {
     `<form id='update-bookmark-form'>
         <label for="title">Title:</label>
         <input type="text" name='title' id='title' placeholder="${bookmark.title}" maxlength="50">
-    <div class=ratings id='add-rating'>
-        <input type="radio" name="new-rating" value="1">1
-        <input type="radio" name="new-rating" value="2">2
-        <input type="radio" name="new-rating" value="3">3
-        <input type="radio" name="new-rating" value="4">4
-        <input type="radio" name="new-rating" value="5">5
-    </div>
+      <label for='description'>Description:</label>
       <textarea rows="14" cols="10" maxlength="350" wrap="soft" id='description' name='description' placeholder="${bookmark.desc}"></textarea>
       <section class='expand-buttons'>
           <button type='submit' id='update-button' name='update-button'>Save</button>
@@ -208,7 +202,7 @@ const handleNewBookmarkSubmit = function () {
         event.stopPropagation();
 
       const updateBookmarkTitle = $('#title').val();
-      const updateBookmarkRating = $('input[name=new-rating]:checked').val();
+      //const updateBookmarkRating = $('input[name=new-rating]:checked').val();
       const updateBookmarkDesc = $('#description').val();
 
       let id = getBookmarkIdFromElement(event.currentTarget);
@@ -216,7 +210,7 @@ const handleNewBookmarkSubmit = function () {
       
       bookmark.title = updateBookmarkTitle;
       bookmark.desc = updateBookmarkDesc;
-      bookmark.rating = updateBookmarkRating;
+      //bookmark.rating = updateBookmarkRating;
       bookmark.editing=!bookmark.editing;
       render();
 

@@ -20,7 +20,7 @@ const addBookmark = function (title, rating, desc, url) {
 const findAndExpand = function(id) {
   let currentBookmark = this.findById(id);
   currentBookmark.expanded = !currentBookmark.expanded
-  //console.log(currentBookmark);
+  
 }
 
 const findAndGoToLink = function(id) {
@@ -30,10 +30,26 @@ const findAndGoToLink = function(id) {
   window.open(currentUrl, '_blank');
 }
 
+const findAndEdit = function(id) {
+  let currentBookmark = this.findById(id);
+  return currentBookmark;
+}
+
+const findAndDelete = function(id) {
+  this.bookmarks = this.bookmarks.filter(currentBookmark => currentBookmark.id !== id);
+};
+
+const toggleFilterRating = function(){
+
+}
+
 export default {
   bookmarks,
   findById,
   findAndExpand,
   addBookmark,
-  findAndGoToLink
+  findAndEdit,
+  findAndGoToLink,
+  findAndDelete,
+  toggleFilterRating
 }

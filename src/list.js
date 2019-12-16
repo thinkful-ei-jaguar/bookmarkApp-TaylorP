@@ -6,7 +6,7 @@ const generateSlider = function() {
     let header = ` <header>
     <div class="slide-container">
         <h2 id='rating-header'>Minimum Rating:</h2>
-        <input type="range" min="1" max="5" value="1" class="slider" id="myRange" list='tickmarks'>
+        <input type="range" min="1" max="5" value="1" class="slider" id="slider" list='tickmarks' oninput='filterByRating()'>
         <datalist id="tickmarks">
                 <option value="1" label="1"></option>
                 <option value="2"></option>
@@ -89,7 +89,7 @@ const generateAddBookmark = function() {
     let addForm = `<div class='bookmark expand'>
     <form id='add-bookmark-form'>
         <label for="title">Title:</label>
-        <input type="text" name='title' id='title' placeholder="Add a title..." maxlength="50">
+        <input type="text" name='title' id='title' placeholder="Add a title..." maxlength="50" required>
     <div class=ratings id='add-rating'>
         <input type="radio" name="initial-rating" value="1">1
         <input type="radio" name="initial-rating" value="2">2
@@ -97,9 +97,9 @@ const generateAddBookmark = function() {
         <input type="radio" name="initial-rating" value="4">4
         <input type="radio" name="initial-rating" value="5">5
     </div>
-      <textarea rows="14" cols="10" maxlength="350" wrap="soft" id='description' name='description' placeholder="Add a description..."></textarea>
+      <textarea rows="14" cols="10" maxlength="350" wrap="soft" id='description' name='description' placeholder="Add a description..." required></textarea>
       <label for="url">URL:</label>
-      <input type="text" name="url" id="url">
+      <input type="text" name="url" id="url" required>
       <section class='expand-buttons'>
           <button type='submit' id='save-button' name='save-button'>Save</button>
           <button type='button' id='cancel-button' name='cancel-button'>Cancel</button>
@@ -108,8 +108,28 @@ const generateAddBookmark = function() {
 </div>`;
 
 $('.bookmarks-container').prepend(addForm);
+}
 
+const generateUpdateForm = function(bookmark) {
+    let update = 
+    `<form id='update-bookmark-form'>
+        <label for="title">Title:</label>
+        <input type="text" name='title' id='title' placeholder="${bookmark.title}" maxlength="50">
+    <div class=ratings id='add-rating'>
+        <input type="radio" name="new-rating" value="1">1
+        <input type="radio" name="new-rating" value="2">2
+        <input type="radio" name="new-rating" value="3">3
+        <input type="radio" name="new-rating" value="4">4
+        <input type="radio" name="new-rating" value="5">5
+    </div>
+      <textarea rows="14" cols="10" maxlength="350" wrap="soft" id='description' name='description' placeholder="${bookmark.desc}"></textarea>
+      <section class='expand-buttons'>
+          <button type='submit' id='update-button' name='update-button'>Save</button>
+          <button type='button' id='delete-button' name='delete-button'>Remove</button>
+      </section>
+    </form>`;
 
+$('.expand').html(update)
 }
 
 const handleAddClick = function() {
@@ -125,8 +145,24 @@ const handleVisitClick = function() {
         event.stopPropagation();
         let id = getBookmarkIdFromElement(event.currentTarget);
         store.findAndGoToLink(id);
-        console.log('visit button clicked');
-        //visit click goes to link
+    })
+}
+
+const handleEditClick = function (){
+    $('.main').on('click', '#edit-button', event=>{
+        event.stopPropagation();
+        let id = getBookmarkIdFromElement(event.currentTarget);
+        let bookmark = store.findAndEdit(id);
+        generateUpdateForm(bookmark);
+});
+}
+
+const handleDeleteClick = function(){
+    $('.main').on('click', '#delete-button', event =>{
+        event.stopPropagation();
+        let id = getBookmarkIdFromElement(event.currentTarget);
+        store.findAndDelete(id);
+        render();
     })
 }
 
@@ -139,6 +175,7 @@ const handleExpand = function() {
         event.preventDefault();
         let id = getBookmarkIdFromElement(event.currentTarget);
         store.findAndExpand(id);
+        console.log('expand!')
         render();
     })
 }
@@ -151,20 +188,47 @@ const handleNewBookmarkSubmit = function () {
       const newBookmarkDesc = $('#description').val();
       const newBookmarkUrl = $('#url').val();
       store.addBookmark(newBookmarkTitle, newBookmarkRating, newBookmarkDesc, newBookmarkUrl);
-      console.log(store.bookmarks);
       $('#add-button').removeAttr('disabled');
       render();
     });
     $('.main').on('click', '#cancel-button', event => {
         event.preventDefault();
-        console.log('cancel button clicked');
         $('#add-button').removeAttr('disabled');
         render();
     })
   };
+/**
+ * current spot: text fields rendering, contracts as soon as you click to edit field.
+ * Added event.stopPropgation but no luck
+ */
+  const handleUpdateBookmark = function() {
+    $('.main').on('click', '#update-button', event =>{
+        event.stopPropagation();
+
+      const updateBookmarkTitle = $('#title').val();
+      const updateBookmarkRating = $('input[name=new-rating]:checked').val();
+      const updateBookmarkDesc = $('#description').val();
+
+      let id = getBookmarkIdFromElement(event.currentTarget);
+      let bookmark = store.findAndEdit(id);
+      console.log(bookmark);
+      bookmark.title = updateBookmarkTitle;
+      bookmark.desc = updateBookmarkDesc;
+      bookmark.rating = updateBookmarkRating;
+      console.log(bookmark);
+      render();
+
+  })
+  }
+
+ const filterByRating = function(){
+    let rating = document.getElementById('slider').value;
+    console.log(rating);
+ }
 
 let render = function() {
     let bookmarks = [...store.bookmarks];
+    //filterByRating();
     generateSlider();
     generateList();
 
@@ -179,6 +243,9 @@ let bindEventListeners = function() {
     handleNewBookmarkSubmit();
     handleExpand();
     handleVisitClick();
+    handleEditClick();
+    handleUpdateBookmark();
+    handleDeleteClick();
 }
 
 export default {

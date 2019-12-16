@@ -55,7 +55,7 @@ const generateBookmarkElement = function(bookmark) {
                 <p>${bookmark.desc}</p>
           </section>
           <section class='expand-buttons'>
-                <button type='button' id='visit-button' name='visit-button'>Visit</buttion>
+                <button type='button' id='visit-button' name='visit-button'><a href='${bookmark.url}' target='_blank'>Visit</a></buttion>
                 <button type='button' id='edit-button' name='edit-button' href='edit.html'>edit</buttion>
           </section>
           </div>`;
@@ -146,8 +146,6 @@ const handleAddClick = function() {
 const handleVisitClick = function() {
     $('.main').on('click', '#visit-button', event=>{
         event.stopPropagation();
-        let id = getBookmarkIdFromElement(event.currentTarget);
-        store.findAndGoToLink(id);
     })
 }
 
@@ -181,9 +179,7 @@ const handleExpand = function() {
         let id = getBookmarkIdFromElement(event.currentTarget);
         let bookmark = store.findAndEdit(id);
         if (!bookmark.editing) {
-          //bookmark.editing = !bookmark.editing;
           store.findAndExpand(id);
-          console.log(bookmark.editing);
           render();
         }
     })
@@ -218,12 +214,10 @@ const handleNewBookmarkSubmit = function () {
       let id = getBookmarkIdFromElement(event.currentTarget);
       let bookmark = store.findAndEdit(id);
       
-      console.log(bookmark);
       bookmark.title = updateBookmarkTitle;
       bookmark.desc = updateBookmarkDesc;
       bookmark.rating = updateBookmarkRating;
       bookmark.editing=!bookmark.editing;
-      console.log(bookmark);
       render();
 
   })
@@ -233,9 +227,7 @@ const handleNewBookmarkSubmit = function () {
      $('.main').on('click', '#slider', function(e){
          e.stopPropagation();
          let min = $('#slider').val();
-         //console.log(store.minRating);
-         store.minRating = min;
-         console.log('refresh');
+         store.minRating = min;;
          render();
      })
  }

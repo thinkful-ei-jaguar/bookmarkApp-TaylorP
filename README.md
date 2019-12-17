@@ -23,4 +23,4 @@ A bookmark app using API by Taylor Piccarreto for Thinkful EI program.
 * I can select from a range element a "minimum rating" to filter the list by all bookmarks rated at or above the chosen selection
 * I can edit the Title and Description of a bookmark in my list
 
-[LiveApp](link goes here)
+[LiveApp](https://thinkful-ei-jaguar.github.io/bookmarkApp-TaylorP/)

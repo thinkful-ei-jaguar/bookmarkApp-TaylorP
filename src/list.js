@@ -1,5 +1,6 @@
 import store from './store';
 import $ from 'jquery';
+import api from './api';
 
 
 const generateSlider = function() {
@@ -186,32 +187,42 @@ const handleNewBookmarkSubmit = function () {
       const newBookmarkRating = $('input[name=initial-rating]:checked').val();
       const newBookmarkDesc = $('#description').val();
       const newBookmarkUrl = $('#url').val();
-      store.addBookmark(newBookmarkTitle, newBookmarkRating, newBookmarkDesc, newBookmarkUrl);
-      $('#add-button').removeAttr('disabled');
-      render();
+
+      api.createBookmark(newBookmarkTitle, newBookmarkRating, newBookmarkDesc, newBookmarkUrl)
+        .then(res=>res.json)
+        .then((newBookmark) => {
+            store.addBookmark(newBookmark);
+            $('#add-button').removeAttr('disabled');
+            render();
+        })
     });
+
     $('.main').on('click', '#cancel-button', event => {
         event.preventDefault();
         $('#add-button').removeAttr('disabled');
         render();
     })
-  };
+  
+};
 
   const handleUpdateBookmark = function() {
     $('.main').on('click', '#update-button', event =>{
         event.stopPropagation();
 
-      const updateBookmarkTitle = $('#title').val();
+      const title = $('#title').val();
       //const updateBookmarkRating = $('input[name=new-rating]:checked').val();
-      const updateBookmarkDesc = $('#description').val();
+      const desc = $('#description').val();
+      const editing = !editing;
+      const updateBookmark = {title, desc, editing}
 
       let id = getBookmarkIdFromElement(event.currentTarget);
-      let bookmark = store.findAndEdit(id);
+      //let bookmark = store.findAndEdit(id);
+      console.log(updateBookmark);
+
+      api.updateBookmark(id, updateBookmark)
+      .then(store.findAndUpdate(id, updateBookmark));
       
-      bookmark.title = updateBookmarkTitle;
-      bookmark.desc = updateBookmarkDesc;
-      //bookmark.rating = updateBookmarkRating;
-      bookmark.editing=!bookmark.editing;
+      
       render();
 
   })

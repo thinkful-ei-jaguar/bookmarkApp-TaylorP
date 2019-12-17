@@ -1,5 +1,3 @@
-import bookmark from './bookmark';
-
 const bookmarks = [];
 
 
@@ -7,15 +5,8 @@ const findById = function(id) {
     return this.bookmarks.find(currentItem => currentItem.id ===id);
 };
 
-const addBookmark = function (title, rating, desc, url) {
-    try {
-      bookmark.validateTitle(title);
-      bookmark.validateUrl(url);
-      bookmark.validateDesc(desc);
-      this.bookmarks.push(bookmark.create(title, rating, desc, url));
-    } catch (e) {
-      console.log(e.message);
-    }
+const addBookmark = function (bookmark) {
+    this.bookmarks.push(bookmark);
 };
 
 const findAndExpand = function(id) {
@@ -40,8 +31,14 @@ const findAndDelete = function(id) {
   this.bookmarks = this.bookmarks.filter(currentBookmark => currentBookmark.id !== id);
 };
 
-const toggleFilterRating = function(){
+const findAndUpdate = function(id, newData) {
+  console.log(`f&u: ${id}`);
+  console.log(`f&u: ${newData}`);
+  let bookmark = this.bookmarks.find(currentItem => currentItem.id ===id)
+  let newBookmark = Object.assign(bookmark, newData);
+  
 
+  return newBookmark;
 }
 
 export default {
@@ -52,6 +49,6 @@ export default {
   findAndEdit,
   findAndGoToLink,
   findAndDelete,
-  toggleFilterRating,
+  findAndUpdate,
   minRating:1,
 }

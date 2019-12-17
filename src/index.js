@@ -1,6 +1,6 @@
 'use strict';
 import list from './list';
-import './index.css';
+import 'index.css';
 import $ from 'jquery';
 import api from './api';
 import store from './store';

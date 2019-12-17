@@ -41,6 +41,7 @@ const generateBookmarkElement = function(bookmark) {
             <button type='button' id='visit-button' name='visit-button'>Visit</buttion>
             <button type='button' id='edit-button' name='edit-button' href='edit.html'>edit</buttion>
       </section>
+      <button type='button' id='expand-button' name='expand-button'>+</button>
       </div>`
     ;
     if(store.minRating > bookmark.rating){
@@ -57,8 +58,9 @@ const generateBookmarkElement = function(bookmark) {
           </section>
           <section class='expand-buttons'>
                 <button type='button' id='visit-button' name='visit-button'><a href='${bookmark.url}' target='_blank'>Visit</a></buttion>
-                <button type='button' id='edit-button' name='edit-button' href='edit.html'>edit</buttion>
+                <button type='button' id='edit-button' name='edit-button' >Edit</buttion>
           </section>
+          <button type='button' id='expand-button' name='expand-button'>-</button>
           </div>`;
     }
 
@@ -118,9 +120,9 @@ const generateUpdateForm = function(bookmark) {
     let update = 
     `<form id='update-bookmark-form'>
         <label for="title">Title:</label>
-        <input type="text" name='title' id='title' placeholder="${bookmark.title}" maxlength="50">
+        <input type="text" name='title' id='title' placeholder="${bookmark.title}" maxlength="50" required>
       <label for='description'>Description:</label>
-      <textarea rows="14" cols="10" maxlength="350" wrap="soft" id='description' name='description' placeholder="${bookmark.desc}"></textarea>
+      <textarea rows="14" cols="10" maxlength="350" wrap="soft" id='description' name='description' placeholder="${bookmark.desc}" required></textarea>
       <section class='expand-buttons'>
           <button type='submit' id='update-button' name='update-button'>Update</button>
           <button type='button' id='delete-button' name='delete-button'>Remove</button>
@@ -160,7 +162,7 @@ const handleDeleteClick = function(){
         let id = getBookmarkIdFromElement(event.currentTarget);
         
         api.deleteBookmark(id)
-        .then(res=>res.json)
+        .then(res=>res.json())
         .then(result => {
             store.findAndDelete(id)
             render();
@@ -173,7 +175,7 @@ const getBookmarkIdFromElement = function(bookmark) {
 }
 
 const handleExpand = function() {
-    $('.main').on('click', '#expand', event => {
+    $('.main').on('click', '#expand-button', event => {
         event.preventDefault();
         event.stopPropagation();
         let id = getBookmarkIdFromElement(event.currentTarget);
@@ -194,7 +196,7 @@ const handleNewBookmarkSubmit = function () {
       const newBookmarkUrl = $('#url').val();
 
       api.createBookmark(newBookmarkTitle, newBookmarkRating, newBookmarkDesc, newBookmarkUrl)
-        .then(res=>res.json)
+        .then(res=>res.json())
         .then((newBookmark) => {
             store.addBookmark(newBookmark);
             $('#add-button').removeAttr('disabled');
@@ -215,21 +217,18 @@ const handleNewBookmarkSubmit = function () {
         event.preventDefault();
         console.log('update form submiting...')
       const title = $('#title').val();
-      //const updateBookmarkRating = $('input[name=new-rating]:checked').val();
+      //const rating = $('input[name=new-rating]:checked').val();
       const desc = $('#description').val();
 
       
       const updateBookmark = {title, desc}
 
       let id = getBookmarkIdFromElement(event.currentTarget);
-      //let bookmark = store.findAndEdit(id);
       let bookmark = store.findById(id);
       bookmark.editing = !bookmark.editing;
-      console.log(bookmark);
-      console.log(updateBookmark);
 
       api.updateBookmark(id, updateBookmark)
-      .then(res=>res.json)
+      .then(res=>res.json())
       .then(result => {
           store.findAndUpdate(id, updateBookmark)
             store.editing = !store.editing;

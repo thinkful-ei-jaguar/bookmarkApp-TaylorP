@@ -18,6 +18,16 @@
     width: 30px;
 }
 
+.add-button-container {
+    margin-left: auto;
+    margin-right: 50px;
+}
+
+h1 {
+    margin-right: auto;
+    margin-left: 50px;
+}
+
 button {
     border-radius: 5px;
     border: 1px black solid;
@@ -86,9 +96,11 @@ h2 {
     height: 150px;
     width: 150px;
     border: 1px black solid;
+    border-radius: 5px;
     box-shadow: 2px 3px 3px rgba(0,0,0,0.25);
     background-color: lightgrey;
     text-align: center;
+
 }
 
 .ratings {
@@ -104,8 +116,14 @@ h2 {
     width: 200px;
 }
 
-h3 {
-    
+p {
+    width: 200px;
+    height: 200px;
+    padding: 10px 0;
+}
+
+a {
+    text-decoration: none;
 }
 
 .star {
@@ -147,6 +165,13 @@ h3 {
     display: none;
 }
 
+#expand-button {
+    margin-top: auto;
+    border: none;
+    background-color: lightgrey;
+    box-shadow: none;
+}
+
 @media screen and  (min-width: 600px){
 #add {
     display: inline;
@@ -183,11 +208,23 @@ h3 {
     flex-direction: column;
 }
 
+.expand-buttons {
+    margin: 0;
+}
+
+p {
+    width: 200px;
+    height: 170px;
+    padding: 10px 0;
+    text-align: center;
+}
 
 
-#add-bookmark {
+
+#add-bookmark-form, #update-bookmark-form {
     display: flex;
     flex-direction: column;
+    width: 450px;
 }
 
 #description {
@@ -197,6 +234,22 @@ h3 {
 
 #title, #url {
     width: 450px;
+}
+
+.ratings {
+    margin-left: auto;
+    margin-right: 10px;
+}
+
+#expand-button {
+    margin-top: 0;
+    border: none;
+    background-color: lightgrey;
+    box-shadow: none;
+}
+
+.expand .ratings {
+    margin: 0;
 }
 
 }

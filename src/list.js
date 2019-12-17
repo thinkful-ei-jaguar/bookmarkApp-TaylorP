@@ -175,7 +175,7 @@ const getBookmarkIdFromElement = function(bookmark) {
 }
 
 const handleExpand = function() {
-    $('.main').on('click', '#expand-button', event => {
+    $('.main').on('click', '#expand-button, #expand', event => {
         event.preventDefault();
         event.stopPropagation();
         let id = getBookmarkIdFromElement(event.currentTarget);

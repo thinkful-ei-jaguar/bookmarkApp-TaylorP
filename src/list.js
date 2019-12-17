@@ -1,9 +1,10 @@
+/* eslint-disable indent */
 import store from './store';
 import $ from 'jquery';
 import api from './api';
 
 
-const generateSlider = function() {
+const generateSlider = function () {
     let header = ` <header>
     <div class="slide-container">
         <h2 id='rating-header'>Minimum Rating:</h2>
@@ -21,19 +22,19 @@ const generateSlider = function() {
     $('.main').html(header);
 };
 
-const generateList = function() {
+const generateList = function () {
     let container = `
     <section class='bookmarks-container'></section>`;
-  
+
     $('.main').append(container);
 }
 
-const generateBookmarkElement = function(bookmark) {
+const generateBookmarkElement = function (bookmark) {
     let bookmarkElement = `<div class='bookmark' id='expand' data-id='${bookmark.id}'>
     <h3>${bookmark.title}</h3>
       <div class=ratings>`
-      +generateBookmarkRatingElement(bookmark)+
-      `</div>
+        + generateBookmarkRatingElement(bookmark) +
+        `</div>
       <section class='description hidden'>
             <p>${bookmark.desc}</p>
       </section>
@@ -42,16 +43,16 @@ const generateBookmarkElement = function(bookmark) {
             <button type='button' id='edit-button' name='edit-button' href='edit.html'>edit</buttion>
       </section>
       </div>`
-    ;
-    if(store.minRating > bookmark.rating){
+        ;
+    if (store.minRating > bookmark.rating) {
         return '';
     }
-    if(bookmark.expanded) {
+    if (bookmark.expanded) {
         bookmarkElement = `<div class='bookmark expand' id='expand' data-id='${bookmark.id}'>
         <h3>${bookmark.title}</h3>
           <div class=ratings>`
-          +generateBookmarkRatingElement(bookmark)+
-          `</div>
+            + generateBookmarkRatingElement(bookmark) +
+            `</div>
           <section class='description'>
                 <p>${bookmark.desc}</p>
           </section>
@@ -65,31 +66,31 @@ const generateBookmarkElement = function(bookmark) {
     return bookmarkElement;
 }
 
-const generateBookmarkRatingElement = function(bookmark) {
+const generateBookmarkRatingElement = function (bookmark) {
     let starRatings = '';
     let checksNeedToAdd = bookmark.rating;
     let starElement;
-  
-    for(let i = 0; i < 5; i++) {
-      if(checksNeedToAdd > 0) {
-        starElement = `<div class='star checked'></div>`;
-        checksNeedToAdd -= 1;
-      } else {
-        starElement = `<div class='star'></div>`;
-      }
-  
-      starRatings += starElement;
-    }
-  
-    return starRatings;
-  }
 
-const generateBookmarkString = function(bookmarkList) {
-    const bookmarks = bookmarkList.map((item)=>generateBookmarkElement(item));
+    for (let i = 0; i < 5; i++) {
+        if (checksNeedToAdd > 0) {
+            starElement = `<div class='star checked'></div>`;
+            checksNeedToAdd -= 1;
+        } else {
+            starElement = `<div class='star'></div>`;
+        }
+
+        starRatings += starElement;
+    }
+
+    return starRatings;
+}
+
+const generateBookmarkString = function (bookmarkList) {
+    const bookmarks = bookmarkList.map((item) => generateBookmarkElement(item));
     return bookmarks.join('');
 }
 
-const generateAddBookmark = function() {
+const generateAddBookmark = function () {
     let addForm = `<div class='bookmark expand'>
     <form id='add-bookmark-form'>
         <label for="title">Title:</label>
@@ -111,12 +112,12 @@ const generateAddBookmark = function() {
     </form>
 </div>`;
 
-$('.bookmarks-container').prepend(addForm);
+    $('.bookmarks-container').prepend(addForm);
 }
 
-const generateUpdateForm = function(bookmark) {
-    let update = 
-    `<form id='update-bookmark-form'>
+const generateUpdateForm = function (bookmark) {
+    let update =
+        `<form id='update-bookmark-form'>
         <label for="title">Title:</label>
         <input type="text" name='title' id='title' placeholder="${bookmark.title}" maxlength="50">
       <label for='description'>Description:</label>
@@ -127,10 +128,10 @@ const generateUpdateForm = function(bookmark) {
       </section>
     </form>`;
 
-$('.expand').html(update)
+    $('.expand').html(update)
 }
 
-const handleAddClick = function() {
+const handleAddClick = function () {
     $('#add-button').on('click', event => {
         event.preventDefault();
         generateAddBookmark();
@@ -138,24 +139,24 @@ const handleAddClick = function() {
     })
 }
 
-const handleVisitClick = function() {
-    $('.main').on('click', '#visit-button', event=>{
+const handleVisitClick = function () {
+    $('.main').on('click', '#visit-button', event => {
         event.stopPropagation();
     })
 }
 
-const handleEditClick = function (){
-    $('.main').on('click', '#edit-button', event=>{
+const handleEditClick = function () {
+    $('.main').on('click', '#edit-button', event => {
         event.stopPropagation();
         let id = getBookmarkIdFromElement(event.currentTarget);
         let bookmark = store.findAndEdit(id);
         bookmark.editing = !bookmark.editing;
         generateUpdateForm(bookmark);
-});
+    });
 }
 
-const handleDeleteClick = function(){
-    $('.main').on('click', '#delete-button', event =>{
+const handleDeleteClick = function () {
+    $('.main').on('click', '#delete-button', event => {
         event.stopPropagation();
         let id = getBookmarkIdFromElement(event.currentTarget);
         store.findAndDelete(id);
@@ -163,38 +164,40 @@ const handleDeleteClick = function(){
     })
 }
 
-const getBookmarkIdFromElement = function(bookmark) {
+const getBookmarkIdFromElement = function (bookmark) {
     return $(bookmark).closest('.bookmark').data('id');
 }
 
-const handleExpand = function() {
+const handleExpand = function () {
     $('.main').on('click', '#expand', event => {
         event.preventDefault();
         event.stopPropagation();
         let id = getBookmarkIdFromElement(event.currentTarget);
         let bookmark = store.findAndEdit(id);
+        console.log("id", id);
+        console.log("bookmark", bookmark);
         if (!bookmark.editing) {
-          store.findAndExpand(id);
-          render();
+            store.findAndExpand(id);
+            render();
         }
     })
 }
 
 const handleNewBookmarkSubmit = function () {
-    $('.main').submit(function (event) {
-      event.preventDefault();
-      const newBookmarkTitle = $('#title').val();
-      const newBookmarkRating = $('input[name=initial-rating]:checked').val();
-      const newBookmarkDesc = $('#description').val();
-      const newBookmarkUrl = $('#url').val();
+    $('.main').on('submit', '#add-bookmark-form', event => {
+        event.preventDefault();
+        const newBookmarkTitle = $('#title').val();
+        const newBookmarkRating = $('input[name=initial-rating]:checked').val();
+        const newBookmarkDesc = $('#description').val();
+        const newBookmarkUrl = $('#url').val();
 
-      api.createBookmark(newBookmarkTitle, newBookmarkRating, newBookmarkDesc, newBookmarkUrl)
-        .then(res=>res.json)
-        .then((newBookmark) => {
-            store.addBookmark(newBookmark);
-            $('#add-button').removeAttr('disabled');
-            render();
-        })
+        api.createBookmark(newBookmarkTitle, newBookmarkRating, newBookmarkDesc, newBookmarkUrl)
+            .then(res => res.json)
+            .then((newBookmark) => {
+                store.addBookmark(newBookmark);
+                $('#add-button').removeAttr('disabled');
+                render();
+            });
     });
 
     $('.main').on('click', '#cancel-button', event => {
@@ -202,42 +205,46 @@ const handleNewBookmarkSubmit = function () {
         $('#add-button').removeAttr('disabled');
         render();
     })
-  
+
 };
 
-  const handleUpdateBookmark = function() {
-    $('.main').on('click', '#update-button', event =>{
+const handleUpdateBookmark = function () {
+    $('.main').on('submit', '#update-bookmark-form', event => {
         event.stopPropagation();
 
-      const title = $('#title').val();
-      //const updateBookmarkRating = $('input[name=new-rating]:checked').val();
-      const desc = $('#description').val();
-      const editing = !editing;
-      const updateBookmark = {title, desc, editing}
+        const title = $('#title').val();
+        //const updateBookmarkRating = $('input[name=new-rating]:checked').val();
+        const desc = $('#description').val();
+        // const editing = !editing;
+        let id = getBookmarkIdFromElement(event.currentTarget);
+        let bookmark = store.findById(id);
 
-      let id = getBookmarkIdFromElement(event.currentTarget);
-      //let bookmark = store.findAndEdit(id);
-      console.log(updateBookmark);
+        console.log(bookmark);
 
-      api.updateBookmark(id, updateBookmark)
-      .then(store.findAndUpdate(id, updateBookmark));
-      
-      
-      render();
+        const updateBookmark = { title, desc };
+        console.log(updateBookmark);
 
-  })
-  }
+        api.updateBookmark(id, updateBookmark)
+            .then(res => res.json)
+            .then(result => {
+                console.log("updateBookmark 2nd then")
+                store.findAndUpdate(id, updateBookmark);
+                store.editing = !store.editing;
+                render();
+            });
+    })
+}
 
- const handleMinRating =function() {
-     $('.main').on('click', '#slider', function(e){
-         e.stopPropagation();
-         let min = $('#slider').val();
-         store.minRating = min;;
-         render();
-     })
- }
+const handleMinRating = function () {
+    $('.main').on('click', '#slider', function (e) {
+        e.stopPropagation();
+        let min = $('#slider').val();
+        store.minRating = min;;
+        render();
+    })
+}
 
-let render = function() {
+let render = function () {
     let bookmarks = [...store.bookmarks];
     generateSlider();
     generateList();
@@ -245,10 +252,10 @@ let render = function() {
     const bookmarkListString = generateBookmarkString(bookmarks);
 
     $('.bookmarks-container').html(bookmarkListString);
-    
+
 }
 
-let bindEventListeners = function() {
+let bindEventListeners = function () {
     handleAddClick();
     handleNewBookmarkSubmit();
     handleExpand();

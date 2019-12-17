@@ -7,15 +7,13 @@ import store from './store';
 
 function main() {
   api.getBookmarks()
-  .then(res => res.json())
-  .then((bookmarks) => {
-    bookmarks.forEach((bookmark) => store.addBookmark(bookmark));
-    store.expanded = false;
-    store.editing = false;
-    list.render();
-    
-    
-  });
+    .then(res => res.json())
+    .then((bookmarks) => {
+      bookmarks.forEach((bookmark) => store.addBookmark(bookmark));
+      store.expanded = false;
+      store.editing = false;
+      list.render();
+    });
 
   list.bindEventListeners();
   list.render();

@@ -32,8 +32,6 @@ const findAndDelete = function(id) {
 };
 
 const findAndUpdate = function(id, newData) {
-  console.log(`f&u: ${id}`);
-  console.log(`f&u: ${newData}`);
   let bookmark = this.bookmarks.find(currentItem => currentItem.id ===id)
   let newBookmark = Object.assign(bookmark, newData);
   

@@ -25,6 +25,7 @@ const createBookmark = function(title, rating, desc, url) {
 const updateBookmark = function(id, updateData) {
 
     let updateBookmark = JSON.stringify(updateData);
+    console.log('update bm:', updateBookmark);
 
    return fetch(`${base_url}/bookmarks/${id}`, {
     method: 'PATCH',
@@ -35,8 +36,17 @@ const updateBookmark = function(id, updateData) {
 });
 }
 
+const deleteBookmark = function(id) {
+    return fetch(`${base_url}/bookmarks/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+    }})
+}
+
 export default {
     getBookmarks,
     createBookmark,
-    updateBookmark
+    updateBookmark,
+    deleteBookmark
 };

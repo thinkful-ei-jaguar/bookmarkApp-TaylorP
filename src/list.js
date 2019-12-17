@@ -6,7 +6,7 @@ import api from './api';
 const generateSlider = function() {
     let header = ` <header>
     <div class="slide-container">
-        <h2 id='rating-header'>Minimum Rating:</h2>
+        <label for='slider'>Minimum Rating:</label>
         <input type="range" min="1" max="5" value="${store.minRating}" class="slider" id="slider" list='tickmarks'>
         <datalist id="tickmarks">
                 <option value="1" label="1"></option>
@@ -30,7 +30,7 @@ const generateList = function() {
 
 const generateBookmarkElement = function(bookmark) {
     let bookmarkElement = `<div class='bookmark' id='expand' data-id='${bookmark.id}'>
-    <h3>${bookmark.title}</h3>
+    <h2>${bookmark.title}</h2>
       <div class=ratings>`
       +generateBookmarkRatingElement(bookmark)+
       `</div>
@@ -122,7 +122,7 @@ const generateUpdateForm = function(bookmark) {
       <label for='description'>Description:</label>
       <textarea rows="14" cols="10" maxlength="350" wrap="soft" id='description' name='description' placeholder="${bookmark.desc}"></textarea>
       <section class='expand-buttons'>
-          <button type='submit' id='update-button' name='update-button'>Save</button>
+          <button type='submit' id='update-button' name='update-button'>Update</button>
           <button type='button' id='delete-button' name='delete-button'>Remove</button>
       </section>
     </form>`;
@@ -158,8 +158,13 @@ const handleDeleteClick = function(){
     $('.main').on('click', '#delete-button', event =>{
         event.stopPropagation();
         let id = getBookmarkIdFromElement(event.currentTarget);
-        store.findAndDelete(id);
-        render();
+        
+        api.deleteBookmark(id)
+        .then(res=>res.json)
+        .then(result => {
+            store.findAndDelete(id)
+            render();
+            });
     })
 }
 
@@ -181,7 +186,7 @@ const handleExpand = function() {
 }
 
 const handleNewBookmarkSubmit = function () {
-    $('.main').submit(function (event) {
+    $('.main').on('submit', '#add-bookmark-form', function (event) {
       event.preventDefault();
       const newBookmarkTitle = $('#title').val();
       const newBookmarkRating = $('input[name=initial-rating]:checked').val();
@@ -207,23 +212,29 @@ const handleNewBookmarkSubmit = function () {
 
   const handleUpdateBookmark = function() {
     $('.main').on('click', '#update-button', event =>{
-        event.stopPropagation();
-
+        event.preventDefault();
+        console.log('update form submiting...')
       const title = $('#title').val();
       //const updateBookmarkRating = $('input[name=new-rating]:checked').val();
       const desc = $('#description').val();
-      const editing = !editing;
-      const updateBookmark = {title, desc, editing}
+
+      
+      const updateBookmark = {title, desc}
 
       let id = getBookmarkIdFromElement(event.currentTarget);
       //let bookmark = store.findAndEdit(id);
+      let bookmark = store.findById(id);
+      bookmark.editing = !bookmark.editing;
+      console.log(bookmark);
       console.log(updateBookmark);
 
       api.updateBookmark(id, updateBookmark)
-      .then(store.findAndUpdate(id, updateBookmark));
-      
-      
-      render();
+      .then(res=>res.json)
+      .then(result => {
+          store.findAndUpdate(id, updateBookmark)
+            store.editing = !store.editing;
+            render();
+        });
 
   })
   }

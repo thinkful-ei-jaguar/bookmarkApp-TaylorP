@@ -13,8 +13,6 @@ function main() {
     store.expanded = false;
     store.editing = false;
     list.render();
-    
-    
   });
 
   list.bindEventListeners();

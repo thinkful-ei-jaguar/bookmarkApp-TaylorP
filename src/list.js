@@ -3,29 +3,17 @@ import $ from 'jquery';
 import api from './api';
 
 
-const generateSlider = function() {
-    let header = ` <header>
-    <div class="slide-container">
-        <label for='slider'>Minimum Rating:</label>
-        <input type="range" min="1" max="5" value="${store.minRating}" class="slider" id="slider" list='tickmarks'>
-        <datalist id="tickmarks">
-                <option value="1" label="1"></option>
-                <option value="2"></option>
-                <option value="3"></option>
-                <option value="4"></option>
-                <option value="5" label="5"></option>
-              </datalist>
-    </div>
-    </header>`
+/*const generateSlider = function() {
+    let header = ``
 
     $('.main').html(header);
-};
+};*/
 
 const generateList = function() {
     let container = `
     <section class='bookmarks-container'></section>`;
   
-    $('.main').append(container);
+    $('.main').html(container);
 }
 
 const generateBookmarkElement = function(bookmark) {
@@ -239,17 +227,18 @@ const handleNewBookmarkSubmit = function () {
   }
 
  const handleMinRating =function() {
-     $('.main').on('click', '#slider', function(e){
+     $('#slider').change( function(e){
          e.stopPropagation();
          let min = $('#slider').val();
          store.minRating = min;;
+         console.log('min rating changed')
          render();
      })
  }
 
 let render = function() {
     let bookmarks = [...store.bookmarks];
-    generateSlider();
+    //generateSlider();
     generateList();
 
     const bookmarkListString = generateBookmarkString(bookmarks);

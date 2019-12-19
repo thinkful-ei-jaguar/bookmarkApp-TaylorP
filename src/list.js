@@ -2,13 +2,6 @@ import store from './store';
 import $ from 'jquery';
 import api from './api';
 
-
-/*const generateSlider = function() {
-    let header = ``
-
-    $('.main').html(header);
-};*/
-
 const generateList = function() {
     let container = `
     <section class='bookmarks-container'></section>`;
@@ -238,7 +231,6 @@ const handleNewBookmarkSubmit = function () {
 
 let render = function() {
     let bookmarks = [...store.bookmarks];
-    //generateSlider();
     generateList();
 
     const bookmarkListString = generateBookmarkString(bookmarks);
